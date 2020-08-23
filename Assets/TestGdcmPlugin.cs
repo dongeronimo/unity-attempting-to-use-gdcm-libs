@@ -20,7 +20,7 @@ public class TestGdcmPlugin : MonoBehaviour
         Thread thread = new Thread(() =>
         {
             loadingState = DirectoryLoadingState.LOADING;
-            List<PathAndData> sortedFileList = directoryReaderService.readDirectory("C:/dicoms/teste_unity");
+            List<PathAndData> sortedFileList = directoryReaderService.readDirectory("C:/dicoms/COU IV");
             sortedFiles = sortedFileList;
             loadingState = DirectoryLoadingState.LOADED;
         });

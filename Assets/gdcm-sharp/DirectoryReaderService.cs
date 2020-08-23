@@ -110,7 +110,8 @@ public class DirectoryReaderService
         gdcm.DataElement element = dataset.GetDataElement(Tags.ImagePosition);
         string valueAsString = element.GetByteValue().toString();
         var partsAsString = valueAsString.Split('\\');
-        var partsAsFloat = partsAsString.Select(part => float.Parse(part)).ToArray();
+        var partsAsFloat = partsAsString.Select(part => float.Parse(part ,
+            System.Globalization.CultureInfo.InvariantCulture)).ToArray();
         return partsAsFloat;
     }
     float[] GetDirectionCosines(gdcm.DataSet dataset)
