@@ -9,12 +9,18 @@ public class DirectoryReaderService
 {
     public FilenamesType readDirectory(string path)
     {
-        gdcm.FilenamesType unsortedFiles = GetUnsortedFilenameList(path);
-        gdcm.Scanner scanner = PrepareFileScanner();
-        gdcm.FilenamesType filteredFiles = ScanFiles(scanner, unsortedFiles);
         gdcm.FilenamesType sortedFiles = SortFilenames(filteredFiles);
         return sortedFiles;
     }
+
+    gdcm.FilenamesType GetFilteredFiles(string path)
+    {
+        gdcm.FilenamesType unsortedFiles = GetUnsortedFilenameList(path);
+        gdcm.Scanner scanner = PrepareFileScanner();
+        gdcm.FilenamesType filteredFiles = ScanFiles(scanner, unsortedFiles);
+        return filteredFiles;
+    }
+
     /**Returns the unsorted files list in the given directory. This list is not filtered 
      * (that means that the list may have non-dicom files) nor sorted.*/
     private gdcm.FilenamesType GetUnsortedFilenameList(string path)
