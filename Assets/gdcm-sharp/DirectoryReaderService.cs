@@ -9,8 +9,7 @@ public class DirectoryReaderService
 {
     public FilenamesType readDirectory(string path)
     {
-        gdcm.FilenamesType sortedFiles = SortFilenames(filteredFiles);
-        return sortedFiles;
+        return GetFilteredFiles(path);
     }
 
     gdcm.FilenamesType GetFilteredFiles(string path)
