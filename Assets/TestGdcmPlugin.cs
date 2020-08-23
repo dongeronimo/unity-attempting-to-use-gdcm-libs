@@ -2,22 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-class FileScanException : System.Exception
-{
-    public FileScanException(string path):base("could not scan path "+path){}
-}
-class CouldNotReadGDCMFileException : System.Exception
-{
-    public CouldNotReadGDCMFileException(string filename) : base("could not read file " + filename) { }
-}
+
+
 public class TestGdcmPlugin : MonoBehaviour
 {
     /**Tags that I use.*/
-    gdcm.Tag PatientName = new gdcm.Tag(0x0010, 0x0010);
-    gdcm.Tag StudyInstanceUID = new gdcm.Tag(0x0020, 0x000d);
-    gdcm.Tag SeriesInstanceUID = new gdcm.Tag(0x0020, 0x000e);
-    gdcm.Tag DirectionCosines = new gdcm.Tag(0x0020, 0x0037);
-    gdcm.Tag ImagePosition = new gdcm.Tag(0x0020, 0x0032);
+    //gdcm.Tag PatientName = new gdcm.Tag(0x0010, 0x0010);
+    //gdcm.Tag StudyInstanceUID = new gdcm.Tag(0x0020, 0x000d);
+    //gdcm.Tag SeriesInstanceUID = new gdcm.Tag(0x0020, 0x000e);
+    //gdcm.Tag DirectionCosines = new gdcm.Tag(0x0020, 0x0037);
+    //gdcm.Tag ImagePosition = new gdcm.Tag(0x0020, 0x0032);
 
     /**Returns the unsorted files list in the given directory. This list is not filtered 
      * (that means that the list may have non-dicom files) nor sorted.*/
@@ -35,11 +29,11 @@ public class TestGdcmPlugin : MonoBehaviour
     private gdcm.Scanner PrepareFileScanner()
     {
         gdcm.Scanner s0 = new gdcm.Scanner();
-        s0.AddTag(StudyInstanceUID);
-        s0.AddTag(SeriesInstanceUID);
-        s0.AddTag(PatientName);
-        s0.AddTag(DirectionCosines);
-        s0.AddTag(ImagePosition);
+        s0.AddTag(Tags.StudyInstanceUID);
+        s0.AddTag(Tags.SeriesInstanceUID);
+        s0.AddTag(Tags.PatientName);
+        s0.AddTag(Tags.DirectionCosines);
+        s0.AddTag(Tags.ImagePosition);
         return s0;
     }
     /// <summary>
@@ -80,24 +74,24 @@ public class TestGdcmPlugin : MonoBehaviour
     string GetPatientName(gdcm.DataSet dataset)
     {
         //Os mecanismos de gdcm::Attribute tb estão quebrados.
-        gdcm.DataElement element = dataset.GetDataElement(PatientName);
+        gdcm.DataElement element = dataset.GetDataElement(Tags.PatientName);
         return element.GetValue().toString();
     }
 
     string GetStudyUid(gdcm.DataSet dataset)
     {
-        gdcm.DataElement element = dataset.GetDataElement(StudyInstanceUID);
+        gdcm.DataElement element = dataset.GetDataElement(Tags.StudyInstanceUID);
         return element.GetValue().toString();
     }
 
     string GetSeriesUid(gdcm.DataSet dataset)
     {
-        gdcm.DataElement element = dataset.GetDataElement(SeriesInstanceUID);
+        gdcm.DataElement element = dataset.GetDataElement(Tags.SeriesInstanceUID);
         return element.GetValue().toString();
     }
     float[] GetImagePosition(gdcm.DataSet dataset)
     {
-        gdcm.DataElement element = dataset.GetDataElement(ImagePosition);
+        gdcm.DataElement element = dataset.GetDataElement(Tags.ImagePosition);
         string valueAsString = element.GetByteValue().toString();
         var partsAsString = valueAsString.Split('\\');
         var partsAsFloat = partsAsString.Select(part => float.Parse(part)).ToArray();
@@ -105,7 +99,7 @@ public class TestGdcmPlugin : MonoBehaviour
     }
     float[] GetDirectionCosines(gdcm.DataSet dataset)
     {
-        string valueAsString = dataset.GetDataElement(DirectionCosines).GetByteValue().toString();
+        string valueAsString = dataset.GetDataElement(Tags.DirectionCosines).GetByteValue().toString();
         var partsAsString = valueAsString.Split('\\');
         var partsAsFloat = partsAsString.Select(part => float.Parse(part)).ToArray();
         return partsAsFloat;
