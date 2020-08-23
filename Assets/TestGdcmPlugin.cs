@@ -6,39 +6,40 @@ using System.Threading;
 
 public class TestGdcmPlugin : MonoBehaviour
 {
+    /// <summary>
+    /// Indicates the state of the load process
+    /// </summary>
+    public enum DirectoryLoadingState {DIDNT_BEGUN, LOADING, LOADED };
+    private DirectoryLoadingState loadingState = DirectoryLoadingState.DIDNT_BEGUN;
+
     private DirectoryReaderService directoryReaderService = new DirectoryReaderService();
-    gdcm.FilenamesType sortedFiles = null;
+    List<PathAndData> sortedFiles = null;
     // Start is called before the first frame update
     void Start()
     {
         Thread thread = new Thread(() =>
         {
-            gdcm.FilenamesType sortedFileList = directoryReaderService.readDirectory("C:/dicoms/teste_unity");
+            loadingState = DirectoryLoadingState.LOADING;
+            List<PathAndData> sortedFileList = directoryReaderService.readDirectory("C:/dicoms/teste_unity");
             sortedFiles = sortedFileList;
+            loadingState = DirectoryLoadingState.LOADED;
         });
         thread.Start();
-        //gdcm.FilenamesType sortedFiles = directoryReaderService.readDirectory("C:/dicoms/teste_unity");
-        //foreach(var f in sortedFiles)
-        //{
-        //    Debug.Log(f);
-        //}
     }
-    bool alredyPrinted = false;
+
     // Update is called once per frame
+    bool alredyPrinted = false;
     void Update()
     {
-        if (alredyPrinted) return;
-        if(sortedFiles != null)
+        if(!alredyPrinted)
+            Debug.Log(loadingState);
+        if(loadingState == DirectoryLoadingState.LOADED && alredyPrinted == false)
         {
-            foreach (var f in sortedFiles)
+            foreach(var f in sortedFiles)
             {
-                Debug.Log(f);
+                Debug.Log("Name = " + f.patient + ", imagePosition = " + f.position[0] + ", " + f.position[1] + ", " + f.position[2]);
             }
             alredyPrinted = true;
-        }
-        else
-        {
-            Debug.Log("loading...");
         }
     }
 }

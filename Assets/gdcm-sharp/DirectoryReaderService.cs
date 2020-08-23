@@ -4,15 +4,27 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading;
+using System.IO;
 
+public struct PathAndData
+{
+    public string path;
+    public string patient;
+    public string study;
+    public string series;
+    public float[] position;
+    public float[] orientationPlane;
+}
 public class DirectoryReaderService
 {
-    public FilenamesType readDirectory(string path)
+    public List<PathAndData> readDirectory(string path)
     {
-        return GetFilteredFiles(path);
+        var filteredFiles = GetFilteredFiles(path);
+        return SortFilenames(filteredFiles);
     }
 
-    gdcm.FilenamesType GetFilteredFiles(string path)
+    private gdcm.FilenamesType GetFilteredFiles(string path)
     {
         gdcm.FilenamesType unsortedFiles = GetUnsortedFilenameList(path);
         gdcm.Scanner scanner = PrepareFileScanner();
@@ -108,30 +120,29 @@ public class DirectoryReaderService
         var partsAsFloat = partsAsString.Select(part => float.Parse(part)).ToArray();
         return partsAsFloat;
     }
-    gdcm.FilenamesType SortFilenames(gdcm.FilenamesType files)
+    List<PathAndData> SortFilenames(gdcm.FilenamesType files)
     {
-        //Os mecanismos de sorting da gdcm estão quebrados na interface da swig. Terei que fazer o sorting na mão
-        //1)Sort por paciente
-        files.ToList().Sort((string file1, string file2) =>
+        var paths = files.Select(currFilePath =>
         {
-            gdcm.DataSet ds1 = GetDatasetFromFile(file1);
+            gdcm.DataSet ds1 = GetDatasetFromFile(currFilePath);
+            Thread.Yield();
             string p1Name = GetPatientName(ds1);
             string p1Study = GetStudyUid(ds1);
             string p1Series = GetSeriesUid(ds1);
             float[] p1Position = GetImagePosition(ds1);
             float[] image1OrientationPlane = GetDirectionCosines(ds1);
+            var pd = new PathAndData() { path = currFilePath, patient = p1Name, study = p1Study, series = p1Series, orientationPlane = image1OrientationPlane, position = p1Position };
+            return pd;
+        }).ToList<PathAndData>();
+        paths.Sort((PathAndData file1, PathAndData file2) =>
+        {
+            int nameComparison = file1.patient.CompareTo(file2.patient);
+            int studyComparison = file1.study.CompareTo(file2.study);
+            int seriesComparison = file1.series.CompareTo(file2.series);
 
-            gdcm.DataSet ds2 = GetDatasetFromFile(file2);
-            string p2Name = GetPatientName(ds2);
-            string p2Study = GetStudyUid(ds2);
-            string p2Series = GetSeriesUid(ds2);
-            float[] p2Position = GetImagePosition(ds2);
-            float[] p2DirectionCosine = GetDirectionCosines(ds2);
-
-            int nameComparison = p1Name.CompareTo(p2Name);
-            int studyComparison = p1Study.CompareTo(p2Study);
-            int seriesComparison = p1Series.CompareTo(p2Series);
-
+            var image1OrientationPlane = file1.orientationPlane;
+            var p1Position = file1.position;
+            var p2Position = file2.position;
             double[] normal = new double[3];
             normal[0] = image1OrientationPlane[1] * image1OrientationPlane[5] - image1OrientationPlane[2] * image1OrientationPlane[4];
             normal[1] = image1OrientationPlane[2] * image1OrientationPlane[3] - image1OrientationPlane[0] * image1OrientationPlane[5];
@@ -147,8 +158,7 @@ public class DirectoryReaderService
             if (seriesComparison != 0) return seriesComparison;//Se o nome e o estudo são iguais e a serie é diferente retorna a comparacao da serie.
             //Se o nome, estudo e série são iguais retorna a comparação da image position
             return imagePositionComparison;
-
         });
-        return files;
+        return paths;
     }
 }
