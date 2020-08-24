@@ -19,7 +19,7 @@ using System;
 using Css;
 using UnityEngine;
 using Dom;
-
+using UnityEngine.Video;
 
 namespace PowerUI{
 	
@@ -28,9 +28,10 @@ namespace PowerUI{
 	/// </summary>
 	
 	public class VideoFormat:ImageFormat{
-		
+
 		/// <summary>The video retrieved.</summary>
-		public MovieTexture Video;
+		//public MovieTexture Video;
+		public VideoPlayer Video;
 		/// <summary>An isolated material for this image.</summary>
 		private Material IsolatedMaterial;
 		
@@ -43,7 +44,7 @@ namespace PowerUI{
 			
 			if(IsolatedMaterial==null){
 				IsolatedMaterial=new Material(shader);
-				IsolatedMaterial.SetTexture("_MainTex",Video);
+				IsolatedMaterial.SetTexture("_MainTex",Video.texture);
 			}
 			
 			return IsolatedMaterial;
@@ -52,14 +53,14 @@ namespace PowerUI{
 		
 		public override Texture Texture{
 			get{
-				return Video;
+				return Video.texture;
 			}
 		}
 		
 		public override bool LoadFromAsset(UnityEngine.Object asset,ImagePackage package){
 			
 			// Video
-			Video=asset as MovieTexture;
+			Video=asset as VideoPlayer;
 			
 			if(Video!=null){
 				return true;
@@ -100,13 +101,13 @@ namespace PowerUI{
 		
 		public override int Height{
 			get{
-				return Video.height;
+				return (int)Video.height;
 			}
 		}
 		
 		public override int Width{
 			get{
-				return Video.width;
+				return (int)Video.width;
 			}
 		}
 		
