@@ -18,7 +18,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Dom;
 using PowerUI.Http;
-
+using UnityEngine.Video;
 
 namespace PowerUI{
 	
@@ -603,7 +603,7 @@ namespace PowerUI{
 		}
 		
 		#if !MOBILE && !UNITY_WEBGL && !UNITY_TVOS
-		internal virtual void ReceivedMovieTexture(UnityEngine.MovieTexture tex){
+		internal virtual void ReceivedMovieTexture(VideoPlayer tex){
 			
 			// Trigger a state 3:
 			readyState=3;

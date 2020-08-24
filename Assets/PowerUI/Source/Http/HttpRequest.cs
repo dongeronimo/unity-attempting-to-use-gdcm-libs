@@ -24,7 +24,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using PowerUI;
 using Dom;
-
+using UnityEngine.Video;
 
 namespace PowerUI.Http{
 	
@@ -61,7 +61,7 @@ namespace PowerUI.Http{
 		#endif
 		#if !MOBILE && !UNITY_WEBGL && !UNITY_TVOS
 		/// <summary>The video being downloaded, if any. Note: Pro only.</summary>
-		public MovieTexture Movie;
+		public VideoPlayer Movie;
 		#endif
 		
 		/// <summary>HACK! Workaround for a long standing Unity bug that doesn't allow multiple SET-COOKIE headers.</summary>
@@ -322,7 +322,7 @@ namespace PowerUI.Http{
 		
 		#if !MOBILE && !UNITY_WEBGL && !UNITY_TVOS
 		/// <summary>The response as a video. Null if there was an error.</summary>
-		public MovieTexture Video{
+		public VideoPlayer Video{
 			get{
 				if(Errored){
 					return null;
@@ -527,7 +527,7 @@ namespace PowerUI.Http{
 					HandleHeaders();
 				
 				#if !MOBILE && !UNITY_WEBGL && !UNITY_TVOS
-				}else if(Package.readyState_==2 && Movie!=null && Movie.isReadyToPlay){
+				}else if(Package.readyState_==2 && Movie!=null && Movie.isPrepared) { 
 					
 					// Downloaded it far enough to try playing it - let the package know:
 					Package.ReceivedMovieTexture(Movie);

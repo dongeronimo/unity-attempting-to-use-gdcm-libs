@@ -19,7 +19,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Blaze;
 using Dom;
-
+using UnityEngine.Video;
 
 namespace PowerUI{
 	
@@ -186,14 +186,12 @@ namespace PowerUI{
 		}
 		
 		#if !MOBILE && !UNITY_WEBGL && !UNITY_TVOS
-		internal override void ReceivedMovieTexture(MovieTexture tex){
-			
-			// Apply it now:
-			VideoFormat video=Contents as VideoFormat;
-			video.Video=tex;
-			
-			base.ReceivedMovieTexture(tex);
-			
+		internal override void ReceivedMovieTexture(VideoPlayer tex){
+			//// Apply it now:
+			//VideoPlayer video =Contents as VideoPlayer;
+			//video.Video=tex;
+			//base.ReceivedMovieTexture(tex);
+			throw new NotImplementedException("broken due to unity breaking change");
 		}
 		#endif
 		

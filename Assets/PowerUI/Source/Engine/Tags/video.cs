@@ -19,7 +19,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Dom;
-
+using UnityEngine.Video;
 
 namespace PowerUI{
 	
@@ -170,25 +170,23 @@ namespace PowerUI{
 		
 		#if !MOBILE && !UNITY_WEBGL && !UNITY_TVOS
 		/// <summary>The source movie texture.</summary>
-		public override MovieTexture video{
+		public override VideoPlayer video
+		{
 			get{
-				// Grab the background image:
-				BackgroundImage image=RenderData.BGImage;
-				
-				if(image==null || image.Image==null){
-					// Not got a background image. Stop there.
-					return null;
-				}
-				
-				VideoFormat video=image.Image.Contents as VideoFormat;
-				
-				if(video==null){
-					// Not ready yet.
-					return null;
-				}
-				
-				// Grab the video:
-				return video.Video;
+				//// Grab the background image:
+				//BackgroundImage image=RenderData.BGImage;
+				//if(image==null || image.Image==null){
+				//	// Not got a background image. Stop there.
+				//	return null;
+				//}
+				//VideoPlayer video =image.Image.Contents as VideoPlayer;
+				//if(video==null){
+				//	// Not ready yet.
+				//	return null;
+				//}
+				//// Grab the video:
+				//return video;
+				throw new NotImplementedException("broken due unity 2019 deprecation of MovieTexture");
 			}
 		}
 		#endif
@@ -210,7 +208,7 @@ namespace PowerUI{
 		}
 		
 		/// <summary>The source movie texture.</summary>
-		public virtual MovieTexture video{
+		public virtual VideoPlayer video{
 			get{
 				return null;
 			}
@@ -232,50 +230,43 @@ namespace PowerUI{
 		
 		/// <summary>Stops the video.</summary>
 		public void stop(){
-			MovieTexture movie=video;
-			
-			if(!movie.isPlaying){
-				return;
-			}
-			
-			movie.Stop();
-			
+			//MovieTexture movie=video;
+			//if(!movie.isPlaying){
+			//	return;
+			//}
+			//movie.Stop();
 			// Fire an onstop event:
-			Run("onstop",this);
+			Run("onstop", this);
+			throw new NotImplementedException("Broken due unity breaking change");
 		}
 		
 		/// <summary>Pauses the video.</summary>
 		public void pause(){
-			MovieTexture movie=video;
-			
-			if(!movie.isPlaying){
-				return;
-			}
-			
-			movie.Pause();
+			//MovieTexture movie=video;
+			//if(!movie.isPlaying){
+			//	return;
+			//}
+			//movie.Pause();
 			
 			// Fire an onpause event:
 			Run("onpause",this);
+			throw new NotImplementedException("Broken due unity breaking change");
 		}
 		
 		/// <summary>Plays the video.</summary>
 		public void play(){
-			MovieTexture movie=video;
-			
-			if(movie.isPlaying){
-				return;
-			}
-			
-			movie.Play();
-			
-			if(this["audio"]!=null){
-				
-				playAudio();
-				
-			}
+			//MovieTexture movie=video;
+			//if(movie.isPlaying){
+			//	return;
+			//}
+			//movie.Play();
+			//if(this["audio"]!=null){
+			//	playAudio();
+			//}
 			
 			// Fire an onplay event:
 			Run("onplay",this);
+			throw new NotImplementedException("Broken due unity breaking change");
 		}
 		
 		public void playAudio(){
@@ -335,7 +326,8 @@ namespace PowerUI{
 		/// <summary>Gets the audio track of the video.</summary>
 		public AudioClip audioTrack{
 			get{
-				return video.audioClip;
+				//return video.audioClip;
+				throw new NotImplementedException("Broken due unity breaking change");
 			}
 		}
 		
