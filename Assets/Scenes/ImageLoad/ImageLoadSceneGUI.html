@@ -1,3 +1,36 @@
-<div>
-    <span>Hello...</span>
+<style type='text/css'>
+    .primary-color-text::after{
+        color:white
+    }
+    .primary-color-background {
+        background:#fe2acc;
+    }
+    .secondary-color-background {
+        background:#16d454
+    }
+    .elevation1 {
+        background: #2b2b2b;
+    }
+    .progress-bar-container {
+        position: absolute;
+        top: 45%;
+        left: 0;
+        width: 100%;
+        height: auto
+    }
+    .progress-bar-outer {
+        margin: 4px
+    }
+    .progress-bar-inner-progress {
+        width: 50%
+    }
+</style>
+<div class="progress-bar-container elevation1" id="progress-bar-container">
+    <div class="progress-bar-outer" id="progress-bar-outer">
+        <span class="primary-color-text">Loading series...</span>
+        <div class="progress-bar-inner-progress primary-color-background" id="progress-bar-progress">
+            <span></span>
+        </div>
+
+    </div>
 </div>
