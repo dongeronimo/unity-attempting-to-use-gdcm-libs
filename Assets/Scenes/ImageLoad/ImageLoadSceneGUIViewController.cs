@@ -16,6 +16,7 @@ public class ImageLoadSceneGUIViewController : MonoBehaviour
     private void Update()
     {
         UpdateProgressBarWithMyGDCMLoadProgress();
+        HideProgressBarAndGoToNextSceneWhenLoadDone();
     }
 
     private void UpdateProgressBarWithMyGDCMLoadProgress()
@@ -33,6 +34,16 @@ public class ImageLoadSceneGUIViewController : MonoBehaviour
     {
         var progressBarInnerProgress = document.getElementById("progress-bar-progress");
         progressBarInnerProgress.style.width = widthStr;
+    }
+
+    private void HideProgressBarAndGoToNextSceneWhenLoadDone()
+    {
+        if (gdcmPlugin.LoadingState == MyGdcmPlugin.DirectoryLoadingState.LOADED)
+        {
+            Dom.Element progressBar = document.getElementById("progress-bar-container");
+            progressBar.style.animation = "fade-progress-bar 1s";
+            
+        }
     }
 
 }
