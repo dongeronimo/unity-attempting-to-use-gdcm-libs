@@ -18,17 +18,19 @@ public struct PathAndData
 }
 public class DirectoryReaderService
 {
-    public List<PathAndData> readDirectory(string path)
+    public List<PathAndData> readDirectory(string path, Func<float, string, float> progressCallback)
     {
-        var filteredFiles = GetFilteredFiles(path);
-        return SortFilenames(filteredFiles);
+        var filteredFiles = GetFilteredFiles(path, progressCallback);
+        return SortFilenames(filteredFiles, progressCallback);
     }
 
-    private gdcm.FilenamesType GetFilteredFiles(string path)
+    private gdcm.FilenamesType GetFilteredFiles(string path, Func<float, string, float> progressCallback)
     {
         gdcm.FilenamesType unsortedFiles = GetUnsortedFilenameList(path);
+        progressCallback(0.01f, "Aquired file list.");
         gdcm.Scanner scanner = PrepareFileScanner();
         gdcm.FilenamesType filteredFiles = ScanFiles(scanner, unsortedFiles);
+        progressCallback(0.05f, "Filtered files.");
         return filteredFiles;
     }
 
@@ -121,11 +123,14 @@ public class DirectoryReaderService
         var partsAsFloat = partsAsString.Select(part => float.Parse(part)).ToArray();
         return partsAsFloat;
     }
-    List<PathAndData> SortFilenames(gdcm.FilenamesType files)
+    List<PathAndData> SortFilenames(gdcm.FilenamesType files, Func<float, string, float> progressCallback)
     {
-        var paths = files.Select(currFilePath =>
+        var currentFileCount = 0;
+        List<PathAndData> paths = files.Select(currFilePath =>
         {
             gdcm.DataSet ds1 = GetDatasetFromFile(currFilePath);
+            float percentage =  (float)currentFileCount / (float)files.Count();
+            progressCallback(percentage, currFilePath);
             Thread.Yield();
             string p1Name = GetPatientName(ds1);
             string p1Study = GetStudyUid(ds1);
@@ -133,6 +138,7 @@ public class DirectoryReaderService
             float[] p1Position = GetImagePosition(ds1);
             float[] image1OrientationPlane = GetDirectionCosines(ds1);
             var pd = new PathAndData() { path = currFilePath, patient = p1Name, study = p1Study, series = p1Series, orientationPlane = image1OrientationPlane, position = p1Position };
+            currentFileCount++;
             return pd;
         }).ToList<PathAndData>();
         paths.Sort((PathAndData file1, PathAndData file2) =>

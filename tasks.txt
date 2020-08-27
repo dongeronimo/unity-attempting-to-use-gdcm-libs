@@ -2,7 +2,7 @@ Exibir lista de imagens para o usuário escolher:
 1)Carregar imagens - FEITO
 1.1)Ler as imagens - FEITO
 1.2)Agrupar as imagens - FAZENDO
-1.3)Mostrar progresso da carga - FAZENDO
+1.3)Mostrar progresso da carga - FEITO
 1.4)Mostrar conclusão da carga - FAZENDO
 
 2)Carga de imagens no android
