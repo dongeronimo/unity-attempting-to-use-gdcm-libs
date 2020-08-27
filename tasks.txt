@@ -1,12 +1,10 @@
-Exibir lista de imagens para o usuário escolher:
 1)Carregar imagens - FEITO
 1.1)Ler as imagens - FEITO
-1.2)Agrupar as imagens - FAZENDO
 1.3)Mostrar progresso da carga - FEITO
-1.4)Mostrar conclusão da carga - FAZENDO
+1.4)Mostrar conclusão da carga - FEITO
 
-2)Carga de imagens no android
-2.1)Compilar as libs com interface de c# para arm64
+2)Carga de imagens no android FAZENDO
+2.1)Compilar as libs com interface de c# para arm64 - FAZENDO
 2.2)Por as libs na app
 2.3)Mudar target pra android
 2.4)Disponibilizar as imagens na app
@@ -19,25 +17,29 @@ Exibir lista de imagens para o usuário escolher:
 3.4)Disponibilizar as imagens na app
 3.5)Funcionar no iphone
 
-4)Renderização volumétrica
-4.1)Montagem da textura 3d a partir das fatias
-4.2)Renderização volumétrica
-4.3)Marcadores de orientação na tela
-4.4)Cubo de orientação
+4)Main Menu
+4.1)Lista de volumes 3d.
+4.2)Tocar num volume ir para a tela de renderizaçào volumétrica
 
-5)Plano de corte
-6)MPR
-7)Color transfer function
-8)Mip
-9)Cubo de corte
-10)Lasso de corte
-11)Realidade aumentada
-12)Segmentação
-13)Conexão com pacs
-14)Download do pacs
-15)Upload pro pacs
-16)Versão IPad
-17)Chat
-18)Anotações nas imagens
+5)Renderização volumétrica
+5.1)Montagem da textura 3d a partir das fatias
+5.2)Renderização volumétrica
+5.3)Marcadores de orientação na tela
+5.4)Cubo de orientação
+
+6)Plano de corte
+7)MPR
+8)Color transfer function
+9)Mip
+10)Cubo de corte
+11)Lasso de corte
+12)Realidade aumentada
+13)Segmentação
+14)Conexão com pacs
+15)Download do pacs
+16)Upload pro pacs
+17)Versão IPad
+18)Chat
+19)Anotações nas imagens
 
 
